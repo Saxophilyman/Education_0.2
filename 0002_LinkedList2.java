@@ -3,10 +3,12 @@ import java.util.*;
 public class LinkedList2 {
     public Node head;
     public Node tail;
+    public int failCount;
 
     public LinkedList2() {
         head = null;
         tail = null;
+        failCount = 0;
     }
 
     public void addInTail(Node _item) {
@@ -23,23 +25,27 @@ public class LinkedList2 {
 
     public Node find(int _value) {
         Node node = this.head;
-        while (node != null) {
+        while (node != null && failCount < 1001) {
             if (node.value == _value)
                 return node;
             node = node.next;
+            failCount++;
         }
+        failCount = 0;
         return null;
     }
 
     public ArrayList<Node> findAll(int _value) {
         ArrayList<Node> nodes = new ArrayList<Node>();
         Node node = this.head;
-        while (node != null) {
+        while (node != null && failCount < 1001) {
             if (node.value == _value) {
                 nodes.add(node);
             }
             node = node.next;
+            failCount++;
         }
+        failCount = 0;
         return nodes;
     }
 
@@ -50,7 +56,7 @@ public class LinkedList2 {
             this.tail = null;
             return true;
         }
-        while (node != null) {
+        while (node != null && failCount < 1001) {
             if (node.value == _value && node.prev == null) {
                 this.head = node.next;
                 this.head.prev = null;
@@ -73,15 +79,49 @@ public class LinkedList2 {
                 return true;
             }
             node = node.next;
+            failCount++;
         }
+        failCount = 0;
         return false;
     }
 
     public void removeAll(int _value) {
-        int count = count();
-        for (int i = 0; i < count; i++) {
-            remove(_value);
+        Node node = this.head;
+        Node prev = null;
+
+        if (node != null && count() == 1 && node.value == _value) {
+            clear();
+            return;
         }
+        if (node != null && count() == 1) {
+            return;
+        }
+
+        while (node != null && failCount < 1001) {
+            if (node.value == _value && prev == null) {
+                node.next.prev = null;
+                this.head = node.next;
+            } else if (node.value == _value) {
+                node.next.prev = prev;
+                node.prev.next = node.next;
+            }
+
+            node = node.next;
+            if (node.next == null) {
+                if (node.value == _value && count() == 1) {
+                    clear();
+                    return;
+                }
+                if (node.value == _value) {
+                    node.prev.next = null;
+                    this.tail = node.prev;
+                }
+                return;
+            }
+            prev = node.prev;
+            failCount++;
+        }
+        failCount = 0;
     }
 
     public void clear() {
@@ -92,11 +132,14 @@ public class LinkedList2 {
     public int count() {
         Node node = this.head;
         int count = 0;
-        while (node != null) {
+        while (node != null && failCount < 1001) {
             count++;
             node = node.next;
+            failCount++;
         }
+        failCount = 0;
         return count;
+
     }
 
     public void insertAfter(Node _nodeAfter, Node _nodeToInsert) {
