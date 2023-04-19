@@ -144,37 +144,57 @@ public class LinkedList2 {
     }
 
     public void insertAfter(Node _nodeAfter, Node _nodeToInsert) {
-        if (_nodeAfter == null && count() == 0) {
-            this.head = _nodeToInsert;
-            this.tail = _nodeToInsert;
-            size++;
+        if (_nodeAfter == null && _nodeToInsert == null) {
+            clear();
             return;
         }
 
         if (_nodeAfter == null) {
-            this.head.prev = _nodeToInsert;
-            _nodeToInsert.next = this.head;
-            this.head = _nodeToInsert;
-            if (this.tail == null) {
-                this.tail = _nodeToInsert;
+            if (head != null) {
+                final Node temp = head.next;
+                head = _nodeToInsert;
+                head.next = temp;
+                size++;
+            } else {
+                addInTail(_nodeToInsert);
             }
-            this.head.prev = null;
-            size++;
             return;
         }
 
-        if (this.tail.prev == _nodeAfter) {
-            this.tail.prev = _nodeToInsert;
+        if (_nodeAfter == tail && _nodeToInsert != null) {
+            addInTail(_nodeToInsert);
+            return;
         }
-        if (_nodeAfter.next == null) {
-            this.tail.prev = this.tail;
-            this.tail = _nodeToInsert;
+
+
+        final Node next = _nodeAfter.next;
+        if (next != null) {
+            _nodeAfter.next.prev = _nodeToInsert;
+            _nodeAfter.next = _nodeToInsert;
+
+            if (_nodeToInsert != null) {
+                _nodeToInsert.prev = _nodeAfter;
+                _nodeToInsert.next = next;
+                size++;
+            } else {
+                tail = _nodeAfter;
+                tail.next = null;
+
+                int newSize = 0;
+                Node node = head;
+
+                while (node != null) {
+                    newSize++;
+                    node = node.next;
+                }
+
+                size = newSize;
+            }
         }
-        _nodeToInsert.next = _nodeAfter.next;
-        _nodeToInsert.prev = _nodeAfter;
-        _nodeAfter.next = _nodeToInsert;
-        this.head.prev = null;
-        size++;
+    }
+
+    public void insertAsFirst(Node _nodeToInsert) {
+        insertAfter(null, _nodeToInsert);
     }
 }
 
