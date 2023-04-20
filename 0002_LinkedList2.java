@@ -1,198 +1,198 @@
 import java.util.*;
 
-public class LinkedList2 {
-    public Node head;
-    public Node tail;
+public class LinkedList2
+{
+	public Node head;
+	public Node tail;
 
-    private int size;
+	public LinkedList2()
+	{
+		head = null;
+		tail = null;
+	}
 
-    public LinkedList2() {
-        head = null;
-        tail = null;
-        size = 0;
-    }
+	public void addInTail(Node _item)
+	{
+		if (head == null) {
+			this.head = _item;
+			this.head.next = null;
+			this.head.prev = null;
+		} else {
+			this.tail.next = _item;
+			_item.prev = tail;
+		}
+		this.tail = _item;
+	}
 
-    public void addInTail(Node _item) {
-        if (head == null) {
-            this.head = _item;
-            this.head.next = null;
-            this.head.prev = null;
-        } else {
-            this.tail.next = _item;
-            _item.prev = tail;
-        }
-        this.tail = _item;
-        size++;
-    }
+	public Node find(int _value)
+	{
+		Node node = this.head;
 
-    public Node find(int _value) {
-        if (head == null || tail == null)
-            return null;
+		while (node != null) {
+			 if (node.value == _value) return node;
+			 node = node.next;
+		}
 
-        if (head.value == _value) {
-            return head;
-        }
+		return null;
+	}
 
-        Node left = head.next;
-        while (left != null) {
-            if (left.value == _value)
-                return left;
+	public ArrayList<Node> findAll(int _value)
+	{
+		ArrayList<Node> nodes = new ArrayList<Node>();
 
-            left = left.next;
-        }
+		Node node = this.head;
 
-        return null;
-    }
+		while (node != null) {
+			if (node.value == _value) nodes.add(node);
+			node = node.next;
+		}
+		return nodes;
+	}
 
-    public ArrayList<Node> findAll(int _value) {
-        ArrayList<Node> nodes = new ArrayList<Node>();
+	public boolean remove(int _value)
+	{
+		Node node = this.head;
+		
+		while (node != null) {
+			
+			if (node.value != _value) {
+				node = node.next;
+				continue;
+			}
+			
+			if (node.next != null && node.prev != null)  {
+				node.prev.next = node.next;
+				node.next.prev = node.prev;
+				node = node.next;
+				return true;
+			}
+			
+			if (node.prev == null && node.next == null) {
+				this.head = null;
+				this.tail = null;
+				node = node.next;
+				return true;
+			}
+			
+			if (node.prev == null) {
+				node.next.prev = null;
+				this.head = node.next;
+			}
+			
+			if (node.next == null) {
+				node.prev.next = null;
+				this.tail = node.prev;
+			}
+			
+			return true;
+			
+		}
+		
+		return false; 
+	}
 
-        if (head == null || tail == null)
-            return nodes;
+	public void removeAll(int _value)
+	{
 
-        Node left = head;
+		Node node = this.head;
 
-        while (left != null) {
-            if (_value == left.value)
-                nodes.add(left);
-            left = left.next;
-        }
+		while (node != null) {
 
-        return nodes;
-    }
+			if (node.value != _value) {
+			 	node = node.next;
+			 	continue;
+			}
 
-    public boolean remove(int _value) {
-        if (head == null || tail == null) {
-            return false;
-        }
+			if (node.prev != null && node.next != null) {
+			 	node.prev.next = node.next;
+				node.next.prev = node.prev;
+			 	node = node.next;
+			 	continue;
+			}
 
-        if (head == tail) {
-            if (_value == head.value) {
-                clear();
-                return true;
-            }
-            return false;
-        }
+			if (node.prev == null && node.next == null) {
+				this.head = null;
+				this.tail = null;
+				break;
+			}
 
-        Node left = head;
+			if (node.prev == null) {
+				node.next.prev = null;
+				this.head = node.next;
+			}
 
-        while (left != null) {
-            if (_value == left.value) {
-                if (left.prev != null) {
-                    left.prev.next = left.next;
-                } else {
-                    head = left.next;
-                    if (head != null)
-                        head.prev = null;
-                }
-                if (left.next != null) {
-                    left.next.prev = left.prev;
-                } else {
-                    tail = left.prev;
-                }
+			if (node.next == null) {
+				node.prev.next = null;
+				this.tail = node.prev;
+			}
+			node = node.next;
+		}
 
-                size--;
-                return true;
-            }
 
-            left = left.next;
-        }
-        return false;
-    }
+	}
 
-    public void removeAll(int _value) {
-        if (head == null || tail == null) {
-            return;
-        }
+	public void clear()
+	{
+		this.head = null;
+		this.tail = null;
+	}
 
-        if (head == tail) {
-            if (_value == head.value)
-                clear();
-            return;
-        }
+	public int count()
+	{
+		int count = 0;
+		
+		Node node = this.head;
+		
+		while (node != null) {
+			++count;
+			node = node.next;
+		}
+		 
+		return count; 
+	}
 
-        Node left = head;
+	public void insertAfter(Node _nodeAfter, Node _nodeToInsert)
+	{
+		
+		_nodeToInsert.prev = _nodeAfter;
+		
+		if (_nodeAfter == null && this.tail == null) {
+			_nodeToInsert.next =  this.head;
+			this.head = _nodeToInsert;
+			this.tail = _nodeToInsert;
+			return;
+		}
+		
+		if (_nodeAfter == null && this.tail != null) {
+			_nodeToInsert.next =  this.head;
+			this.head = _nodeToInsert;
+			return;
+		}
+		
+		if (_nodeAfter.next == null) {
+			_nodeAfter.next = _nodeToInsert;
+			this.tail = _nodeToInsert;
+			return;
+		}
+		
+		_nodeToInsert.next  = _nodeAfter.next;
+		_nodeToInsert.next.prev = _nodeToInsert;
+		_nodeAfter.next = _nodeToInsert;
 
-        while (left != null) {
-            if (_value == left.value) {
-                if (left.prev != null) {
-                    left.prev.next = left.next;
-                } else {
-                    head = left.next;
-                    if (head != null) {
-                        head.prev = null;
-                    }
-                }
-                if (left.next != null) {
-                    left.next.prev = left.prev;
-                } else {
-                    tail = left.prev;
-                }
-
-                size--;
-            }
-
-            left = left.next;
-        }
-    }
-
-    public void clear() {
-        head = null;
-        tail = null;
-        size = 0;
-    }
-
-    public int count() {
-        return size;
-    }
-
-    public void insertAfter(Node _nodeAfter, Node _nodeToInsert) {
-        // здесь будет ваш код вставки узла после заданного узла
-
-        // если _nodeAfter = null
-        // добавьте новый элемент первым в списке
-        if (_nodeAfter == null && count() == 0) {
-            this.head = _nodeToInsert;
-            this.tail = _nodeToInsert;
-            size++;
-            return;
-        }
-
-        if (_nodeAfter == null) {
-            this.head.prev = _nodeToInsert;
-            _nodeToInsert.next = this.head;
-            this.head = _nodeToInsert;
-            if (this.tail == null) {
-                this.tail = _nodeToInsert;
-            }
-            this.head.prev = null;
-            size++;
-            return;
-        }
-
-        if (this.tail.prev == _nodeAfter) {
-            this.tail.prev = _nodeToInsert;
-        }
-        if (_nodeAfter.next == null) {
-            this.tail.prev = this.tail;
-            this.tail = _nodeToInsert;
-        }
-        _nodeToInsert.next = _nodeAfter.next;
-        _nodeToInsert.prev = _nodeAfter;
-        _nodeAfter.next = _nodeToInsert;
-        this.head.prev = null;
-        size++;
-    }
+		
+	}
 }
 
-class Node {
-    public int value;
-    public Node next;
-    public Node prev;
+class Node
+{
+     public int value;
+     public Node next;
+     public Node prev;
 
-    public Node(int _value) {
-        value = _value;
-        next = null;
-        prev = null;
-    }
+     public Node(int _value) 
+     { 
+       value = _value; 
+       next = null;
+       prev = null;
+     }
 }
