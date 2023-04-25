@@ -28,7 +28,7 @@ public class DynArray<T> {
     }
 
     public T getItem(int index) {
-        if (index < 0 || index >= count) throw new ArrayIndexOutOfBoundsException("Index out of bounds");
+        if (index < 0 || index > capacity) throw new ArrayIndexOutOfBoundsException("Index out of bounds for length 16");
         return array[index];
     }
 
@@ -58,10 +58,7 @@ public class DynArray<T> {
     }
 
     public void remove(int index) {
-        if (index < 0 || index > count) throw new ArrayIndexOutOfBoundsException("Index out of bounds");
-        if (count == 0) {
-            return;
-        }
+        if (index < 0 || index >= count) throw new ArrayIndexOutOfBoundsException("Index out of bounds");
         if (count - 1 < capacity / 2) {
             makeArray((int) (capacity / 1.5));
         }
