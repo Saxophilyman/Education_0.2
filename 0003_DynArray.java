@@ -59,12 +59,15 @@ public class DynArray<T> {
 
     public void remove(int index) {
         if (index < 0 || index > count) throw new ArrayIndexOutOfBoundsException("Index out of bounds");
+        if (count == 0) {
+            return;
+        }
         if (count - 1 < capacity / 2) {
             makeArray((int) (capacity / 1.5));
         }
         T[] arrayForInsert = (T[]) Array.newInstance(this.clazz, capacity);
         System.arraycopy(array, 0, arrayForInsert, 0, index);
-        System.arraycopy(array, index + 1, arrayForInsert, index, count - index);
+        System.arraycopy(array, index + 1, arrayForInsert, index, count - index - 1);
 
         array = arrayForInsert;
         count--;
