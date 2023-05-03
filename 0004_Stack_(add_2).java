@@ -20,6 +20,6 @@ public class Stack<T> {
     }
 
     public T peek() {
-        return linkedList.peekFirst(); // если стек пустой
+        return linkedList.peekFirst(); 
     }
 }
