@@ -22,6 +22,21 @@
                 stack.pop();
                 x = stack2.pop() * stack2.pop();
                 stack2.push(x);
+            } else if (stack.peek().equals("-")) {
+                stack.pop();
+                x = stack2.pop();
+                x = stack2.pop() - x;
+                stack2.push(x);
+            } else if (stack.peek().equals("/")) {
+                stack.pop();
+                x = stack2.pop();
+                try {
+                    x = stack2.pop() / x;
+                } catch (ArithmeticException e) {
+                    System.err.println("Нельзя делить на ноль");
+                }
+//                x = stack2.pop() / x;
+                stack2.push(x);
             } else if (stack.peek().equals("=")) {
                 stack.pop();
                 return stack2.pop();
