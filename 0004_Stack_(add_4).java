@@ -1,15 +1,20 @@
     public static boolean balance(String s) {
         Stack<Integer> stack = new Stack<Integer>();
-        int index = 0;
-        do {
-            if (s.charAt(index) == '(') {
+        boolean check = false;
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) == '(') {
                 stack.push(1);
+                check = false;
             }
-            if (s.charAt(index) == ')') {
+            if (s.charAt(i) == ')') {
                 stack.pop();
             }
-            index++;
+            if (stack.size() == 0 && check){
+                return  false;
+            }
+            if (stack.size() == 0){
+                check = true;
+            }
         }
-        while (stack.size() != 0 && index < s.length());
-        return stack.size() == 0 && index == s.length();
+        return stack.size() == 0;
     }
