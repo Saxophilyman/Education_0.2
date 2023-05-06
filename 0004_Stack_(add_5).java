@@ -5,42 +5,35 @@
         for (int i = symbols.length - 1; i >= 0; i--) {
             stack.push(symbols[i]);
         }
+
         while (stack.size() > 0) {
             int x = Integer.MIN_VALUE;
             try {
                 x = Integer.parseInt(stack.peek());
             } catch (NumberFormatException e) {
-
             }
             if (x != Integer.MIN_VALUE) {
                 stack2.push(Integer.valueOf(stack.pop()));
-            } else if (stack.peek().equals("+")) {
-                stack.pop();
-                x = stack2.pop() + stack2.pop();
-                stack2.push(x);
+                continue;
+            } else
+                x = stack2.pop();
+            if (stack.peek().equals("+")) {
+                x += stack2.pop();
             } else if (stack.peek().equals("*")) {
-                stack.pop();
-                x = stack2.pop() * stack2.pop();
-                stack2.push(x);
+                x *= stack2.pop();
             } else if (stack.peek().equals("-")) {
-                stack.pop();
-                x = stack2.pop();
                 x = stack2.pop() - x;
-                stack2.push(x);
             } else if (stack.peek().equals("/")) {
-                stack.pop();
-                x = stack2.pop();
                 try {
                     x = stack2.pop() / x;
                 } catch (ArithmeticException e) {
-                    System.err.println("Нельзя делить на ноль");
+                    return 0000000;
                 }
-//                x = stack2.pop() / x;
-                stack2.push(x);
             } else if (stack.peek().equals("=")) {
-                stack.pop();
-                return stack2.pop();
+                return x;
             }
+            stack.pop();
+            stack2.push(x);
         }
-        return Integer.parseInt(null);
+        return 0000000;
     }
