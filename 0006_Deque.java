@@ -20,11 +20,17 @@ public class Deque<T> {
     }
 
     public T removeFront() {
+        if (size == 0) {
+            return null; 
+        }
         size--;
         return linkedList.removeLast();
     }
 
     public T removeTail() {
+        if (size == 0) {
+            return null;  // если стек пустой
+        }
         size--;
         return linkedList.removeFirst();
     }
