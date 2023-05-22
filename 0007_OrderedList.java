@@ -115,43 +115,69 @@ public class OrderedList<T> {
         return null;
     }
 
-	public void delete(T val) {
-		Node<T> node = this.head;
+    public void delete(T val) {
+        if (head == null)
+            return;
 
-		while (node != null) {
+        if (head.value.equals(val)) {
+            deleteFromHead();
+            return;
+        }
 
-			if (!node.value.equals(val)) {
-				node = node.next;
-				continue;
-			}
+        if (tail.value.equals(val)) {
+            deleteFromTail();
+            return;
+        }
 
-			if (node.next != null && node.prev != null) {
-				node.prev.next = node.next;
-				node.next.prev = node.prev;
-				node = node.next;
-				return;
-			}
+        Node left = head.next;
+        Node right = tail.prev;
 
-			if (node.prev == null && node.next == null) {
-				this.head = null;
-				this.tail = null;
-				node = node.next;
-				return;
-			}
+        for (int i = 0; i < size / 2; i++) {
+            if (left.value.equals(val)) {
+                left.prev.next = left.next;
+                left.next.prev = left.prev;
 
-			if (node.prev == null) {
-				node.next.prev = null;
-				this.head = node.next;
-			}
+                size--;
+                return;
+            }
+            if (right.value.equals(val)) {
+                right.prev.next = right.next;
+                right.next.prev = right.prev;
 
-			if (node.next == null) {
-				node.prev.next = null;
-				this.tail = node.prev;
-			}
-			return;
-		}
-		return;
-	}
+                right.next = null;
+                right.prev = null;
+
+                size--;
+
+                return;
+            }
+
+            left = left.next;
+            right = right.prev;
+        }
+    }
+
+    private void deleteFromHead() {
+        if (size == 1) {
+            clear(_ascending);
+            return;
+        }
+
+        head = head.next;
+        if (head != null)
+            head.prev = null;
+        size--;
+    }
+
+    private void deleteFromTail() {
+        if (size == 1) {
+            clear(_ascending);
+            return;
+        }
+        tail = tail.prev;
+        tail.next = null;
+        size--;
+    }
     
     
 
