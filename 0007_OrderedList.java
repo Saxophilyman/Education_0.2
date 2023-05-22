@@ -115,35 +115,45 @@ public class OrderedList<T> {
         return null;
     }
 
-    public void delete(T val) {
-        Node<T> node = this.head;
-        while (node != null) {
-            if (!node.value.equals(val)) {
-                node = node.next;
-                continue;
-            }
-            if (node.next != null && node.prev != null) {
-                node.prev.next = node.next;
-                node.next.prev = node.prev;
-                return;
-            }
-            if (node.prev == null && node.next == null) {
-                this.head = null;
-                this.tail = null;
-                return;
-            }
-            if (node.prev == null) {
-                node.next.prev = null;
-                this.head = node.next;
-            }
-            if (node.next == null) {
-                node.prev.next = null;
-                this.tail = node.prev;
-            }
-            return;
-        }
-        return;
-    }
+	public void delete(T val) {
+		Node<T> node = this.head;
+
+		while (node != null) {
+
+			if (!node.value.equals(val)) {
+				node = node.next;
+				continue;
+			}
+
+			if (node.next != null && node.prev != null) {
+				node.prev.next = node.next;
+				node.next.prev = node.prev;
+				node = node.next;
+				return;
+			}
+
+			if (node.prev == null && node.next == null) {
+				this.head = null;
+				this.tail = null;
+				node = node.next;
+				return;
+			}
+
+			if (node.prev == null) {
+				node.next.prev = null;
+				this.head = node.next;
+			}
+
+			if (node.next == null) {
+				node.prev.next = null;
+				this.tail = node.prev;
+			}
+			return;
+		}
+		return;
+	}
+    
+    
 
     public void clear(boolean asc) {
         _ascending = asc;
