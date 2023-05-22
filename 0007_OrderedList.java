@@ -26,65 +26,107 @@ public class OrderedList<T> {
         // +1 если v1 > v2
     }
 
-    public void add(T value) {
-        Node<T> node = new Node<>(value);
-        if (count() == 0) {
-            this.head = node;
-            this.tail = node;
+	public void add(T value) {
+		Node<T> newNode = new Node<T>(value);
+		if (head == null) {
+			head = newNode;
+			tail = newNode;
             count++;
-            return;
-        }
-        Node<T> takeNode = this.head;
-        for (int i = 1; i <= count; i++) {
-            if (i == 1 && _ascending && (compare(node.value, takeNode.value) == -1 || compare(node.value, takeNode.value) == 0)) {
-                this.head = node;
-                node.next = takeNode;
-                takeNode.prev = node;
+			return;
+		}
+
+		Node<T> node = head;
+
+		while (node != null) {
+			int compared = compare(node.value, newNode.value);
+
+			if (_ascending) {
+				switch (compared) {
+				case -1: {
+					
+					if (node.equals(tail)) {
+						newNode.prev = node;
+						node.next = newNode;
+						tail = newNode;
+                        count++;
+						return;
+					}
+					node = node.next;
+
+					continue;
+				}
+				case 0: {
+					newNode.next = node;
+					newNode.prev = node.prev;
+					node.prev = newNode;
+					if (newNode.prev == null) {
+						head = newNode;
+                        count++;
+						return;
+					}
+					newNode.prev.next = newNode;
+                    count++;
+					return;
+				}
+				case 1: {					
+					newNode.next = node;
+					newNode.prev = node.prev;
+					node.prev = newNode;
+					if (newNode.prev == null) {
+						head = newNode;
+                        count++;
+						return;
+					}
+					newNode.prev.next = newNode;
+                    count++;
+					return;					
+				}
+				}
+			}
+			switch (compared) {
+			case 1: {
+				
+				if (node.equals(tail)) {
+					newNode.prev = node;
+					node.next = newNode;
+					tail = newNode;
+                    count++;
+					return;
+				}
+				node = node.next;
+
+				continue;
+			}
+			case 0: {
+				newNode.next = node;
+				newNode.prev = node.prev;
+				node.prev = newNode;
+				if (newNode.prev == null) {
+					head = newNode;
+                    count++;
+					return;
+				}
+				newNode.prev.next = newNode;
                 count++;
-                return;
-            }
-            if (i == count && !_ascending && (compare(node.value, takeNode.value) == 1 || compare(node.value, takeNode.value) == 0)) {
-                this.tail = node;
-                node.prev = takeNode;
-                takeNode.next = node;
+				return;
+			}
+			case -1: {					
+				newNode.next = node;
+				newNode.prev = node.prev;
+				node.prev = newNode;
+				if (newNode.prev == null) {
+					head = newNode;
+                    count++;
+					return;
+				}
+				newNode.prev.next = newNode;
                 count++;
-                return;
-            }
-            if (_ascending && (compare(node.value, takeNode.value) == -1 || compare(node.value, takeNode.value) == 0)) {
-                takeNode.prev.next = node;
-                node.next = takeNode;
-                node.prev = takeNode.prev;
-                takeNode.prev = node;
-                count++;
-                return;
-            }
-            if ((_ascending && compare(node.value, takeNode.value) == 1) || (!_ascending && compare(node.value, takeNode.value) == -1)) {
-                if (takeNode.next == null) {
-                    break;
-                }
-                takeNode = takeNode.next;
-            }
-            if (!_ascending && (compare(node.value, takeNode.value) == 1 || compare(node.value, takeNode.value) == 0)) {
-                takeNode.next.prev = node;
-                node.prev = takeNode;
-                node.next = takeNode.next;
-                takeNode.next = node;
-                count++;
-                return;
-            }
-        }
-        if (_ascending) {
-            this.tail = node;
-            node.prev = takeNode;
-            takeNode.next = node;
-        } else {
-            this.head = node;
-            node.next = takeNode;
-            takeNode.prev = node;
-        }
-        count++;
-        return;
-    }
+				return;
+			}
+			}
+			node = node.next;
+		}
+	}
 
     public Node<T> find(T val) {
         if (head == null)
