@@ -132,12 +132,12 @@ public class OrderedList<T> {
         Node left = head.next;
         Node right = tail.prev;
 
-        for (int i = 0; i < size / 2; i++) {
+        for (int i = 0; i < count / 2; i++) {
             if (left.value.equals(val)) {
                 left.prev.next = left.next;
                 left.next.prev = left.prev;
 
-                size--;
+                count--;
                 return;
             }
             if (right.value.equals(val)) {
@@ -147,7 +147,7 @@ public class OrderedList<T> {
                 right.next = null;
                 right.prev = null;
 
-                size--;
+                count--;
 
                 return;
             }
@@ -158,7 +158,7 @@ public class OrderedList<T> {
     }
 
     private void deleteFromHead() {
-        if (size == 1) {
+        if (count == 1) {
             clear(_ascending);
             return;
         }
@@ -166,17 +166,17 @@ public class OrderedList<T> {
         head = head.next;
         if (head != null)
             head.prev = null;
-        size--;
+        count--;
     }
 
     private void deleteFromTail() {
-        if (size == 1) {
+        if (count == 1) {
             clear(_ascending);
             return;
         }
         tail = tail.prev;
         tail.next = null;
-        size--;
+        count--;
     }
     
     
