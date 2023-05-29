@@ -52,7 +52,7 @@ public class HashTable {
         int findIndex = hashFun(value);
         int nonIndex = 0;
         while (nonIndex <= size) {
-            if (slots[findIndex].equals(value)) {
+            if (slots[findIndex] != null && slots[findIndex].equals(value)) {
                 return findIndex;
             }
             findIndex = (findIndex + step) % size;
